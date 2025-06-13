@@ -1,18 +1,25 @@
-# Usa una imagen oficial de Python como base
 FROM python:3.9-slim
-FROM node.js:14
 
-# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos
-COPY . .
+# Instalar dependencias del sistema necesarias
+RUN apt-get update && apt-get install -y \
+    gcc \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Instala las dependencias
+# Copiar solo lo necesario (mejor práctica)
+COPY requirements.txt .
+COPY playground.py .
+
+# Instalar dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expone el puerto de la aplicación
-EXPOSE 8000
+# Crear directorio para la base de datos
+RUN mkdir -p /app/tmp
+
+# Puerto expuesto (Cloud Run usa 8080)
+EXPOSE 8080
 
 # Comando para ejecutar la aplicación
 CMD ["python", "playground.py"]
