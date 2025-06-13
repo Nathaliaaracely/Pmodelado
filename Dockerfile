@@ -1,4 +1,5 @@
 FROM python:3.9-slim
+FROM node:18
 
 WORKDIR /app
 
@@ -16,7 +17,7 @@ COPY playground.py .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Crear directorio para la base de datos
-RUN mkdir -p /app/tmp
+
 
 # Puerto expuesto (Cloud Run usa 8080)
 EXPOSE 8080
